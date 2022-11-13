@@ -3,7 +3,7 @@ use std::env;
 #[allow(unused_imports)]
 use std::fs;
 #[allow(unused_imports)]
-use std::io::Write;
+use std::io::{Write, Read};
 #[allow(unused_imports)]
 use std::net::{TcpListener, TcpStream};
 
@@ -33,7 +33,18 @@ fn main() {
 // }
 
 fn handle_connection(mut stream: TcpStream) {
-    let response: &str = "+PONG\r\n";
+    loop {
+        let mut buffer: [u8; 1024] = [0; 1024];
 
-    stream.write_all(response.as_bytes()).unwrap();
+        match stream.read(&mut buffer) {
+            Ok(_) => {
+                let response: &str = "+PONG\r\n";
+                
+                stream.write_all(response.as_bytes()).unwrap();
+            }
+            Err(_) => {
+
+            }
+        }
+    }
 }
