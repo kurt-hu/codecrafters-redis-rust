@@ -3,6 +3,8 @@ use std::env;
 #[allow(unused_imports)]
 use std::fs;
 #[allow(unused_imports)]
+use std::thread;
+#[allow(unused_imports)]
 use std::io::{Write, Read};
 #[allow(unused_imports)]
 use std::net::{TcpListener, TcpStream};
@@ -21,7 +23,9 @@ fn main() {
     for stream in listener.incoming() {
         match stream {
             Ok(stream) => {
-                handle_connection(stream);
+                thread::spawn(|| {
+                    handle_connection(stream);
+                });
             },
             Err(e) => println!("Error: {}", e),
         }
